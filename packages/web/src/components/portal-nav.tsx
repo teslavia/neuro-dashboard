@@ -20,17 +20,17 @@ export function PortalNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const statusColor = {
-    connected: "bg-emerald-500",
-    disconnected: "bg-red-500",
-    reconnecting: "bg-amber-500",
+    connected: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]",
+    disconnected: "bg-red-400",
+    reconnecting: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]",
   }[connectionStatus];
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4 md:px-6">
         <Link href="/monitor" className="mr-6 flex items-center gap-2 font-semibold">
-          <div className="h-6 w-6 rounded bg-primary" />
-          <span className="hidden sm:inline">Neuro Dashboard</span>
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">N</div>
+          <span className="hidden sm:inline bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Neuro Dashboard</span>
         </Link>
 
         <nav className="hidden md:flex md:items-center md:gap-1">
@@ -41,7 +41,7 @@ export function PortalNav() {
               className={cn(
                 "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent",
                 pathname.startsWith(item.href)
-                  ? "bg-accent text-accent-foreground font-medium"
+                  ? "bg-primary/10 text-primary font-medium"
                   : "text-muted-foreground"
               )}
             >
@@ -53,7 +53,13 @@ export function PortalNav() {
 
         <div className="ml-auto flex items-center gap-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className={cn("h-2 w-2 rounded-full", statusColor)} />
+            <span
+              className={cn(
+                "h-2 w-2 rounded-full",
+                statusColor,
+                connectionStatus === "reconnecting" && "animate-pulse"
+              )}
+            />
             <span className="hidden sm:inline">
               {connectionStatus === "connected" ? "已连接" : connectionStatus === "reconnecting" ? "重连中" : "已断开"}
             </span>

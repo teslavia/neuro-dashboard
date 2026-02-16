@@ -11,17 +11,17 @@ export const REFRESH_INTERVALS = {
 } as const;
 
 export const SEVERITY_COLORS: Record<string, string> = {
-  critical: "text-red-500 bg-red-500/10 border-red-500/20",
-  warning: "text-amber-500 bg-amber-500/10 border-amber-500/20",
-  info: "text-blue-500 bg-blue-500/10 border-blue-500/20",
+  critical: "text-red-400 bg-red-500/15 border-red-500/30",
+  warning: "text-amber-400 bg-amber-500/15 border-amber-500/30",
+  info: "text-blue-400 bg-blue-500/15 border-blue-500/30",
 };
 
 export const CHART_COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
+  "#818cf8",
+  "#34d399",
+  "#fbbf24",
+  "#c084fc",
+  "#f87171",
 ];
 
 export const EVENT_TYPE_LABELS: Record<string, string> = {

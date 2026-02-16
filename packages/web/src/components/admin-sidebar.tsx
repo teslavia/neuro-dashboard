@@ -34,9 +34,9 @@ export function AdminSidebar() {
         collapsed ? "w-16" : "w-56"
       )}
     >
-      <div className="flex h-14 items-center border-b px-4">
+      <div className="flex h-14 items-center border-b border-sidebar-border px-4">
         <Link href="/monitor" className="flex items-center gap-2">
-          <Monitor className="h-5 w-5 text-sidebar-primary" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-xs font-bold">N</div>
           {!collapsed && (
             <span className="text-sm font-semibold text-sidebar-foreground">管理后台</span>
           )}
@@ -51,8 +51,8 @@ export function AdminSidebar() {
             className={cn(
               "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
               pathname.startsWith(item.href)
-                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50"
+                ? "bg-sidebar-primary/15 text-sidebar-primary font-medium"
+                : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
             )}
           >
             <item.icon className="h-4 w-4 shrink-0" />

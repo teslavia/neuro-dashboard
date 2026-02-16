@@ -7,6 +7,14 @@ import { api } from "@/lib/api";
 import { REFRESH_INTERVALS } from "@/lib/constants";
 import type { Device } from "@/lib/types";
 
+import { cn } from "@/lib/utils";
+
+const statusBorderColor = {
+  online: "border-l-emerald-500",
+  offline: "border-l-zinc-500",
+  degraded: "border-l-amber-500",
+} as const;
+
 export function DeviceGrid() {
   const { data: devices } = useApiQuery<Device[]>({
     fetcher: api.getDevices,
@@ -26,7 +34,7 @@ export function DeviceGrid() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {devices.map((device) => (
-        <Card key={device.id} className="relative">
+        <Card key={device.id} className={cn("relative border-l-2", statusBorderColor[device.status])}>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium truncate">
