@@ -1,0 +1,10 @@
+{
+  "name": "neuro-dashboard",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "sync-proto": "bash scripts/sync-proto.sh"
+  }
+}
