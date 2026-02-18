@@ -7,6 +7,8 @@ import type {
   DeviceMetrics,
   ConnectionStatus,
   Severity,
+  ModelRecord,
+  ABTestResult,
 } from "./types";
 
 // Deterministic pseudo-random generator using seed
@@ -186,3 +188,64 @@ export function generateMockEvent(): DetectionEvent {
     boxes: type === "DETECTION_ALERT" ? generateBoxes(seed + 5, Math.floor(randomInRange(seed + 6, 1, 3))) : undefined,
   };
 }
+
+// ── Mock Models ──────────────────────────────────────
+
+export const mockModels: ModelRecord[] = [
+  {
+    modelId: "yolov5s-rk3588",
+    modelPath: "/opt/neuro-pipeline/models/yolov5s-640-640.rknn",
+    modelType: "detection",
+    version: "v1.0.0",
+    status: "deployed",
+    npuCore: 0,
+    deployedAt: Date.now() / 1000 - 86400,
+    targetDeviceId: "edge-001",
+    metadata: { size_mb: 8, avg_confidence: 0.55 },
+  },
+  {
+    modelId: "yolov5m-rk3588",
+    modelPath: "/opt/neuro-pipeline/models/yolov5m-640-640.rknn",
+    modelType: "detection",
+    version: "v1.0.0",
+    status: "deployed",
+    npuCore: 1,
+    deployedAt: Date.now() / 1000 - 86400,
+    targetDeviceId: "edge-001",
+    metadata: { size_mb: 23, avg_confidence: 0.62 },
+  },
+  {
+    modelId: "yolov8s-rk3588",
+    modelPath: "/opt/neuro-pipeline/models/yolov8s-640-640.rknn",
+    modelType: "detection",
+    version: "v1.0.0",
+    status: "deployed",
+    npuCore: 2,
+    deployedAt: Date.now() / 1000 - 3600,
+    targetDeviceId: "edge-001",
+    metadata: { size_mb: 12, avg_confidence: 0.78 },
+  },
+];
+
+// ── Mock A/B Test ──────────────────────────────────────
+
+export const mockABTestResult: ABTestResult = {
+  enabled: true,
+  winner: "yolov8s-rk3588",
+  confidence: 0.85,
+  sufficient_samples: true,
+  variants: {
+    "yolov5s-rk3588": {
+      total_inferences: 1250,
+      avg_latency_ms: 18.5,
+      accuracy: 0.55,
+      total_detections: 875,
+    },
+    "yolov8s-rk3588": {
+      total_inferences: 1500,
+      avg_latency_ms: 22.3,
+      accuracy: 0.78,
+      total_detections: 1170,
+    },
+  },
+};

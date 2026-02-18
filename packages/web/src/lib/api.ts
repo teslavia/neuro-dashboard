@@ -1,7 +1,14 @@
 import { USE_MOCK } from "./constants";
 import { apiClient } from "./api-client";
-import { mockDevices, mockEvents, mockStatus } from "./mock-data";
-import type { SystemStatus, Device, DetectionEvent, ControlCommand } from "./types";
+import { mockDevices, mockEvents, mockStatus, mockModels, mockABTestResult } from "./mock-data";
+import type {
+  SystemStatus,
+  Device,
+  DetectionEvent,
+  ControlCommand,
+  ModelRecord,
+  ABTestResult,
+} from "./types";
 
 export const api = {
   getStatus: (): Promise<SystemStatus> =>
@@ -31,5 +38,39 @@ export const api = {
   sendCommand: (command: ControlCommand) => {
     if (USE_MOCK) return Promise.resolve({ success: true, message: "Mock command sent" });
     return apiClient.sendCommand(command);
+  },
+
+  // ── Model Management ──────────────────────────────────────
+  getModels: (deviceId?: string): Promise<ModelRecord[]> => {
+    if (USE_MOCK) {
+      let models = [...mockModels];
+      if (deviceId) models = models.filter((m) => m.targetDeviceId === deviceId);
+      return Promise.resolve(models);
+    }
+    return apiClient.getModels(deviceId);
+  },
+  switchModel: (modelId: string, deviceId?: string) => {
+    if (USE_MOCK) return Promise.resolve({ success: true, message: `Mock: switched to ${modelId}` });
+    return apiClient.switchModel(modelId, deviceId);
+  },
+  reloadModels: (deviceId?: string) => {
+    if (USE_MOCK) return Promise.resolve({ success: true, message: "Mock: models reloaded" });
+    return apiClient.reloadModels(deviceId);
+  },
+  rollbackModel: (modelId: string) => {
+    if (USE_MOCK) return Promise.resolve({ success: true, message: `Mock: rolled back ${modelId}` });
+    return apiClient.rollbackModel(modelId);
+  },
+
+  // ── A/B Testing ──────────────────────────────────────
+  getABTest: (): Promise<ABTestResult> =>
+    USE_MOCK ? Promise.resolve(mockABTestResult) : apiClient.getABTest(),
+  setABTestSplit: (trafficSplit: number) => {
+    if (USE_MOCK) return Promise.resolve({ success: true, traffic_split: trafficSplit });
+    return apiClient.setABTestSplit(trafficSplit);
+  },
+  resetABTest: () => {
+    if (USE_MOCK) return Promise.resolve({ success: true });
+    return apiClient.resetABTest();
   },
 };

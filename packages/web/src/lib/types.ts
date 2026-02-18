@@ -90,3 +90,171 @@ export interface DeviceTimeSeries {
   deviceName: string;
   data: TimeSeriesPoint[];
 }
+
+// ── Model Management Types ──────────────────────────────────────
+
+export type ModelStatus = "pending" | "deployed" | "failed" | "undeployed";
+
+export interface ModelRecord {
+  modelId: string;
+  modelPath: string;
+  modelType: string;
+  version: string;
+  status: ModelStatus;
+  npuCore: number;
+  deployedAt: number;
+  targetDeviceId: string;
+  metadata: Record<string, string | number>;
+}
+
+export interface VariantMetrics {
+  total_inferences: number;
+  avg_latency_ms: number;
+  accuracy: number;
+  total_detections: number;
+}
+
+export interface ABTestResult {
+  enabled: boolean;
+  message?: string;
+  winner: string;
+  confidence: number;
+  sufficient_samples: boolean;
+  variants: Record<string, VariantMetrics>;
+}
+
+// ── Config Types ──────────────────────────────────────
+
+export interface ConfigResponse {
+  path: string;
+  config: Record<string, unknown>;
+  lastModified: number;
+}
+
+export interface ConfigUpdateResponse {
+  success: boolean;
+  message?: string;
+  errors?: string[];
+  backupPath?: string;
+}
+
+export interface ConfigValidationResponse {
+  valid: boolean;
+  errors: string[];
+}
+
+// ── Behavior & Anomaly Types (v2) ──────────────────────────────────────
+
+export type BehaviorType =
+  | "LOITERING"
+  | "RUNNING"
+  | "CROWD"
+  | "FALL"
+  | "INTRUSION"
+  | "ABANDONED_OBJECT";
+
+export interface BehaviorEvent {
+  id: string;
+  deviceId: string;
+  behaviorType: BehaviorType;
+  confidence: number;
+  timestamp: string;
+  trackId: string;
+  boundingBox: BoundingBox;
+  metadata: Record<string, string | number>;
+}
+
+export interface BaselineStats {
+  metricName: string;
+  mean: number;
+  stdDev: number;
+  sampleCount: number;
+  lastUpdated: string;
+}
+
+export interface AnomalyScore {
+  id: string;
+  deviceId: string;
+  metricName: string;
+  zScore: number;
+  isAnomaly: boolean;
+  timestamp: string;
+  value: number;
+}
+
+// ── VLM Guidance Types (v2) ──────────────────────────────────────
+
+export interface ConfigAdjustment {
+  parameter: string;
+  currentValue: string | number;
+  suggestedValue: string | number;
+  reason: string;
+  impact: "low" | "medium" | "high";
+}
+
+export interface VLMGuidanceResult {
+  id: string;
+  deviceId: string;
+  timestamp: string;
+  analysis: string;
+  adjustments: ConfigAdjustment[];
+  applied: boolean;
+}
+
+// ── Report Types (v2) ──────────────────────────────────────
+
+export interface ReportSection {
+  title: string;
+  content: string;
+  charts?: { type: string; data: unknown }[];
+}
+
+export interface GeneratedReport {
+  id: string;
+  title: string;
+  generatedAt: string;
+  period: { start: string; end: string };
+  sections: ReportSection[];
+}
+
+// ── ReID Types (v2) ──────────────────────────────────────
+
+export interface ReIDAppearance {
+  deviceId: string;
+  timestamp: string;
+  boundingBox: BoundingBox;
+  confidence: number;
+}
+
+export interface ReIDTrack {
+  trackId: string;
+  globalId: string;
+  appearances: ReIDAppearance[];
+  firstSeen: string;
+  lastSeen: string;
+  totalDuration: number;
+}
+
+// ── Auto-Annotator Types (v2) ──────────────────────────────────────
+
+export interface AnnotatedSample {
+  id: string;
+  imageUrl: string;
+  annotations: BoundingBox[];
+  sourceDevice: string;
+  capturedAt: string;
+  verified: boolean;
+}
+
+// ── User Types ──────────────────────────────────────
+
+export type UserRole = "admin" | "operator" | "viewer";
+
+export interface User {
+  id: string;
+  username: string;
+  role: UserRole;
+  email?: string;
+  createdAt: string;
+  lastLogin?: string;
+}

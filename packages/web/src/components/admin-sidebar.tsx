@@ -13,12 +13,22 @@ import {
   Activity,
   ChevronLeft,
   ChevronRight,
+  Brain,
+  AlertTriangle,
+  Sparkles,
+  Camera,
+  Tag,
 } from "lucide-react";
 
 const sidebarItems = [
   { href: "/admin/devices", label: "设备管理", icon: Cpu },
   { href: "/admin/models", label: "模型管理", icon: Box },
   { href: "/admin/config", label: "系统配置", icon: Settings },
+  { href: "/admin/behavior", label: "行为分析", icon: Brain },
+  { href: "/admin/anomaly", label: "异常基线", icon: AlertTriangle },
+  { href: "/admin/vlm-guidance", label: "VLM 引导", icon: Sparkles },
+  { href: "/admin/reid", label: "跨摄像头追踪", icon: Camera },
+  { href: "/admin/annotator", label: "自动标注", icon: Tag },
   { href: "/admin/users", label: "用户管理", icon: Users },
   { href: "/admin/observability", label: "可观测性", icon: Activity },
 ];
