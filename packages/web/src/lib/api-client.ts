@@ -11,21 +11,25 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const apiClient = {
-  getStatus: () => fetchJson<SystemStatus>("/api/status"),
-  getDevices: () => fetchJson<Device[]>("/api/devices"),
-  getEvents: (params?: { limit?: number; device_id?: string }) => {
+  getStatus: () => fetchJson<SystemStatus>("/api/v2/status"),
+  getDevices: () => fetchJson<Device[]>("/api/v2/devices"),
+  getEvents: (params?: { limit?: number; device_id?: string; severity?: string; event_type?: string }) => {
     const qs = new URLSearchParams();
     if (params?.limit) qs.set("limit", String(params.limit));
     if (params?.device_id) qs.set("device_id", params.device_id);
+    if (params?.severity) qs.set("severity", params.severity);
+    if (params?.event_type) qs.set("event_type", params.event_type);
     const query = qs.toString();
-    return fetchJson<DetectionEvent[]>(`/api/events${query ? `?${query}` : ""}`);
+    return fetchJson<DetectionEvent[]>(`/api/v2/events${query ? `?${query}` : ""}`);
   },
   getEventHistory: (hours: number) =>
-    fetchJson<DetectionEvent[]>(`/api/events/history?hours=${hours}`),
+    fetchJson<{ count: number; hours: number; events: DetectionEvent[] }>(
+      `/api/v2/events/history?hours=${hours}`
+    ).then((r) => r.events),
   getDeviceEvents: (deviceId: string) =>
-    fetchJson<DetectionEvent[]>(`/api/devices/${deviceId}/events`),
+    fetchJson<DetectionEvent[]>(`/api/v2/events?device_id=${deviceId}`),
   sendCommand: (command: ControlCommand) =>
-    fetchJson<{ success: boolean; message: string }>("/api/command", {
+    fetchJson<{ success: boolean; message: string }>("/api/v2/command", {
       method: "POST",
       body: JSON.stringify(command),
     }),

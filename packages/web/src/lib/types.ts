@@ -1,7 +1,7 @@
 // Device connection status
 export type ConnectionStatus = "online" | "offline" | "degraded";
 export type Severity = "critical" | "warning" | "info";
-export type CommandType = "SET_FPS" | "CHANGE_MODEL" | "ENABLE_DEBUG" | "SET_DETECTION_THRESHOLD" | "SHUTDOWN" | "RELOAD_MODEL";
+export type CommandType = "SET_FPS" | "CHANGE_MODEL" | "ENABLE_DEBUG" | "SET_DETECTION_THRESHOLD" | "SHUTDOWN" | "RELOAD_MODEL" | "SWITCH_MODEL_VARIANT";
 
 export interface BoundingBox {
   classId: number;
