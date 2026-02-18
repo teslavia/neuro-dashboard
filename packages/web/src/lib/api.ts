@@ -35,6 +35,14 @@ export const api = {
     USE_MOCK
       ? Promise.resolve(mockEvents.filter((e) => e.deviceId === deviceId))
       : apiClient.getDeviceEvents(deviceId),
+  postEvent: (event: Partial<DetectionEvent>) => {
+    if (USE_MOCK) {
+      const newEvent = { ...event, eventId: `mock-${Date.now()}` } as DetectionEvent;
+      mockEvents.unshift(newEvent);
+      return Promise.resolve({ ok: true });
+    }
+    return apiClient.postEvent(event);
+  },
   sendCommand: (command: ControlCommand) => {
     if (USE_MOCK) return Promise.resolve({ success: true, message: "Mock command sent" });
     return apiClient.sendCommand(command);

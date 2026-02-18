@@ -45,6 +45,11 @@ export const apiClient = {
     const query = qs.toString();
     return fetchJson<DetectionEvent[]>(`/api/v2/events${query ? `?${query}` : ""}`);
   },
+  postEvent: (event: Partial<DetectionEvent>) =>
+    fetchJson<{ ok: boolean }>("/api/v2/events", {
+      method: "POST",
+      body: JSON.stringify(event),
+    }),
   getEventHistory: (hours: number) =>
     fetchJson<{ count: number; hours: number; events: DetectionEvent[] }>(
       `/api/v2/events/history?hours=${hours}`
