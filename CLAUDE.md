@@ -57,7 +57,7 @@ Neuro-Pipeline 是一个异构 AI 推理系统：
 - EdgeEvent: type(DETECTION_ALERT/SYSTEM_ERROR/MODEL_LOADED/HEALTH_UPDATE)
 
 ### 配置结构 (pipeline config.yaml 关键字段)
-- edge: device_id, video_source, model_path, fps, confidence_threshold
+- edge: device_id, video_source, model_path, fps, confidence_threshold, send_frame_data(bool), jpeg_quality(1-100)
 - central: port, model_path, inference_mode(llm/vlm)
 - tls: enabled, ca_cert, server_cert, server_key
 - sessions: max_devices(16), heartbeat_interval, expiry_timeout
