@@ -12,6 +12,13 @@ Neuro-Pipeline 是一个异构 AI 推理系统：
 
 本仓库是 Neuro-Pipeline 的管理平台前端，纯粹作为 API 消费者，零侵入 pipeline 代码。
 
+### Pipeline 版本: v2.4.1
+- Central 架构重构: DI 容器、EventBus、DetectionProcessor/VLMPipeline 拆分
+- Edge 架构重构: InputSource 策略模式、Config 4 子结构体
+- Dashboard FastAPI DI: 消除 14 个全局变量 (`extensions/dashboard/services/deps.py`)
+- 配置热重载: logging.level, vlm_rules, alerting.rules, rate_limiting 无需重启
+- VLM 全链路: Edge JPEG 帧编码 → gRPC → Central Qwen2-VL 分析
+
 ### Proto 契约同步
 `proto/neuro_pipeline.proto` 从 neuro-pipeline 仓库复制而来。
 同步方式：`bash scripts/sync-proto.sh`（从 ../repo/proto/ 复制）
@@ -36,6 +43,9 @@ Neuro-Pipeline 是一个异构 AI 推理系统：
 | GET /api/devices | 已注册设备列表 |
 | GET /api/devices/{id}/events | 单设备事件 |
 | WS /ws | WebSocket 实时事件推送 |
+| GET /api/v2/logging/level | 获取当前日志级别 (v2.3+) |
+| PUT /api/v2/logging/level | 动态设置日志级别 (v2.3+) |
+| PUT /api/v2/config | 配置更新 + 热重载触发 (v2.3+) |
 
 ### Prometheus Metrics (port 9090)
 - `np_detections_total` — 检测计数 (by class_name)
@@ -58,12 +68,15 @@ Neuro-Pipeline 是一个异构 AI 推理系统：
 
 ### 配置结构 (pipeline config.yaml 关键字段)
 - edge: device_id, video_source, model_path, fps, confidence_threshold, send_frame_data(bool), jpeg_quality(1-100)
-- central: port, model_path, inference_mode(llm/vlm)
+- edge.cache_queue: max_entries, max_memory_mb — 离线检测缓冲 (v2.3+)
+- central: port, model_path, inference_mode(llm/vlm), vlm_model_path, vlm_models[] (v2.3+)
 - tls: enabled, ca_cert, server_cert, server_key
 - sessions: max_devices(16), heartbeat_interval, expiry_timeout
 - alerting: webhook routes by severity (critical/warning/info)
 - circuit_breaker: failure_threshold, recovery_timeout
 - rate_limiting: max_rps, burst (per-device token bucket)
+- vlm_config_guide: enable_region/sensitivity/fps_adjustment — VLM 闭环优化 (v2.4+)
+- 热重载字段 (无需重启): logging.level, vlm_rules, alerting.rules, rate_limiting
 
 ## 需求
 
